@@ -1,3 +1,4 @@
+// ***************** INCOME **********************
 export interface IincomeTableData {
   NumBonLiv: string;
   DateE: string;
@@ -27,13 +28,7 @@ export interface IaddIncomeData {
   products: IAddFluxProducts[];
 }
 
-export interface IAddFluxProducts {
-  NumProduit: string;
-  Design: string;
-  QtStk: number;
-  [key: string]: string | number;
-}
-
+// ***************** PRODUCT INPUT SELECT **********************
 export interface IProductInputSelect {
   NumProduit: string;
   Design: string;
@@ -52,6 +47,7 @@ export interface IProductInputProps {
   onRemove: (index: number) => void;
 }
 
+// ***************** OUTCOME **********************
 export interface IoutcomeTableData {
   NumFacture: string;
   DateS: string;
@@ -69,4 +65,13 @@ export interface IAddOutcomeData {
   DateS: string;
   NomClient: string;
   products: IProductInputData[];
+}
+
+// ***************** MODALS **********************
+export interface ImodalBoxProps {
+  setisOpen: (isOpen: boolean) => void;
+}
+export interface IconfirmModalBoxProps {
+  setisOpen: (isOpen: boolean) => void;
+  onConfirm: () => void
 }

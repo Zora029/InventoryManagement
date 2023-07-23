@@ -6,6 +6,9 @@ import {
   IincomeTableData,
 } from '../types/index';
 import { productOptions } from '../database/index';
+import ConfirmBox from '../components/MessageBox/ConfirmBox';
+import SuccessBox from './MessageBox/SuccessBox';
+import ErrorBox from './MessageBox/ErrorBox';
 
 interface IAddIncomeData {
   NumBonLiv: string;
@@ -24,6 +27,9 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
     NomFournisseur: '',
     products: [{ NumProduit: '', QtStk: 0 }],
   });
+  const [isConfirmationModalOpen, setisConfirmationModalOpen] = useState(false);
+  const [isSuccessModalOpen, setisSuccessModalOpen] = useState(false);
+  const [isErrorModalOpen, setisErrorModalOpen] = useState(false);
 
   const clearInput = () => {
     setFormData({
@@ -60,8 +66,8 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
     setFormData({ ...formData, products: updatedProducts });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = () => {
+    // event.preventDefault();
     // Here you can send the formData to the backend
     console.log(formData);
     let newIncomeTableData: IincomeTableData[] = formData.products.map((e) => ({
@@ -72,16 +78,18 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
       Design: '',
       QtStk: e.QtStk,
     }));
-    onSubmit([...currentIncomeTableData, ...newIncomeTableData]);
+    try {
+      onSubmit([...currentIncomeTableData, ...newIncomeTableData]);
+      setisSuccessModalOpen(true);
+    } catch (error) {
+      setisErrorModalOpen(true);
+    }
 
     clearInput();
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
-    >
+    <form className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
         <h3 className="font-medium text-black dark:text-white">Add Income</h3>
       </div>
@@ -147,11 +155,20 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
         <span className="text-xl">+</span>Add Product
       </button>
       <button
-        type="submit"
+        onClick={() => setisConfirmationModalOpen(true)}
+        type="button"
         className="mx-auto mb-4 flex w-[20%] justify-center rounded bg-primary p-3 font-medium text-gray"
       >
         Submit
       </button>
+      {isConfirmationModalOpen && (
+        <ConfirmBox
+          onConfirm={handleSubmit}
+          setisOpen={setisConfirmationModalOpen}
+        />
+      )}
+      {isSuccessModalOpen && <SuccessBox setisOpen={setisSuccessModalOpen} />}
+      {isErrorModalOpen && <ErrorBox setisOpen={setisErrorModalOpen} />}
     </form>
   );
 };

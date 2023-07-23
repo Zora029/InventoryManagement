@@ -3,7 +3,6 @@ import AddIncomeForm from '../../components/AddIncomeForm';
 import Breadcrumb from '../../components/Breadcrumb';
 import FluxTableIncome from '../../components/FluxTableIncome';
 import { IincomeTableData } from '../../types';
-// import { incomeTableData } from '../../database';
 const Income = () => {
   const headers: string[] = [
     'Num delivery voucher',
