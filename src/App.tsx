@@ -8,6 +8,7 @@ const Income = lazy(() => import('./pages/Flux/Income'));
 const Outcome = lazy(() => import('./pages/Flux/Outcome'));
 const Tables = lazy(() => import('./pages/Tables'));
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
+const FormProducts = lazy(() => import('./pages/Form/FormProducts'));
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,7 +41,15 @@ function App() {
             }
           />
           <Route
-            path="/tables"
+            path="/product/form"
+            element={
+              <Suspense fallback={<Loader />}>
+                <FormProducts />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/product/list"
             element={
               <Suspense fallback={<Loader />}>
                 <Tables />
