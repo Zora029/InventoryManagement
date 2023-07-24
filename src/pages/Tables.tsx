@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Breadcrumb from '../components/Breadcrumb';
 import TableOne from '../components/TableOne';
@@ -7,45 +7,31 @@ import ProductCard from '../components/ProductCard';
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+import ProductDataService from '../services/ProductDataService';
+import ProductTypes from '../types/ProductTypes';
+import { getAllResources, createResource } from '../services/ProductCRUD';
+
 const Tables = () => {
 
-  const [productsState,setProducts] = useState([
-    {
-      id: 1,
-      designation: "Montre",
-      quantite: 5,
-      description: "Unite",
-      src: "/src/images/product/product-01.png"
-    },
-    {
-      id: 2,
-      designation: "Mac Book",
-      quantite: 2,
-      description: "Unite",
-      src: "/src/images/product/product-02.png"
-    },
-    {
-      id: 3,
-      designation: "Chaise",
-      quantite: 20,
-      description: "Unite",
-      src: "/src/images/product/product-03.png"
-    },
-    {
-      id: 4,
-      designation: "Rice",
-      quantite: 50,
-      description: "Kg",
-      src: "/src/images/product/product-04.png"
-    },
-    {
-      id: 5,
-      designation: "Huile",
-      quantite: 5,
-      description: "Litres",
-      src: "/src/images/product/product-thumb.png"
+  const [productsState,setProducts] = useState<ProductTypes[]>([]);
+
+  useEffect(() => {
+    // Récupérer les ressources lors du montage du composant
+    fetchResources();
+  }, []);
+
+  const fetchResources = async () => {
+    const data = await getAllResources();
+    setProducts(data);
+  };
+
+  const handleCreateResource = async (newResourceData:ProductTypes) => {
+    const createdResource = await createResource(newResourceData);
+    if (createdResource) {
+      // La création a réussi, mettez à jour la liste des ressources
+      fetchResources();
     }
-  ])
+  };
 
   return (
     <>
@@ -54,18 +40,19 @@ const Tables = () => {
       <div className="flex flex-col gap-10">
         <div>
           <div className='flex flex-wrap w-full space-x-25'>
-            {
-              productsState.map((product) =>(
+            {productsState.length !== 0 ? (
+              productsState.map((product, index: number) =>(
                 <ProductCard 
-                  key={product.id}
-                  id={product.id}
-                  designation={product.designation}
+                  key={index}
+                  num_produit={product.num_produit}
+                  design={product.design}
                   quantite={product.quantite}
                   description={product.description}
-                  src={product.src}
+                  image={product.image}
                 />
-              )
-                
+              ))
+              ) : (
+                <div>Aucun element</div>
               )
             }
           </div>

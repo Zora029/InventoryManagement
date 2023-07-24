@@ -1,20 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Breadcrumb from '../../components/Breadcrumb';
 
 import SelectOption from '../../components/SelectOption';
 
-
 import ProductTypes from '../../types/ProductTypes';
 
+import { createResource } from '../../services/ProductCRUD';
+
+import { useParams } from 'react-router-dom';
+
 const FormProducts = () => {
-  const [productState, setProductState] = useState<ProductTypes>({
-    id: 0,
-    designation: '',
-    quantite: 0,
+
+  const {num_prod} = useParams<{num_prod:any}>();
+
+  const [productState, setProductState] = useState({
+    num_produit: 0,
+    design: '',
     description: '',
-    src: '',
+    image: ''
   });
+
+  const [pageTitle, setPageTitle] = useState("Ajouter");
+
+  const [enableFields, setEnableFields] = useState(false);
+
+  useEffect(() => {
+    if (num_prod) {
+      // defini -> edit
+      // fake data
+      setProductState({
+        num_produit: 12,
+        design: 'Chocolat',
+        description: 'Boites',
+        image: 'product-01.png'
+      });
+
+      setPageTitle("Modifier");
+
+      setEnableFields(true);
+    }
+  }, [num_prod]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -40,22 +66,30 @@ const FormProducts = () => {
       console.log("Nom du fichier sélectionné :", fileName);
       setProductState((prevState) => ({
         ...prevState,
-        ["src"]: fileName,
+        ["image"]: fileName,
       }));
       // Tu peux faire ce que tu veux avec le nom du fichier ici
     }
   };
 
+  // const handleCreate = (newResource) => {
+
+  // }
+
   const handleSubmit = (event:any) => {
     event.preventDefault();
     console.log(productState);
+    const data = createResource(productState);
+    console.log(data);
+    console.log("Element add succesfully");
+    
   }
 
-  const options = ['Kg', 'L', 'Boites'];
+  const options = ['Kg', 'L', 'Boites', 'Unite'];
 
   return (
     <>
-      <Breadcrumb pageName="FormElements" />
+      <Breadcrumb pageName={pageTitle} />
 
       <form className="w-full" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-9">
@@ -67,6 +101,23 @@ const FormProducts = () => {
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
+              {/* um_produit */}
+              <div>
+                <label className="mb-3 block text-black dark:text-white">
+                  Identifiant
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g: Rice"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  readOnly={enableFields}
+                  name="num_produit"
+                  value={productState.num_produit}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              {/* Designation */}
               <div>
                 <label className="mb-3 block text-black dark:text-white">
                   Designation
@@ -75,8 +126,8 @@ const FormProducts = () => {
                   type="text"
                   placeholder="e.g: Rice"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  name="designation"
-                    value={productState.designation}
+                  name="design"
+                    value={productState.design}
                     onChange={handleInputChange}
                 />
               </div>

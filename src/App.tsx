@@ -49,6 +49,14 @@ function App() {
             }
           />
           <Route
+            path="/product/form/:num_prod"
+            element={
+              <Suspense fallback={<Loader />}>
+                <FormProducts />
+              </Suspense>
+            }
+          />
+          <Route
             path="/product/list"
             element={
               <Suspense fallback={<Loader />}>

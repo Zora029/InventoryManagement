@@ -1,8 +1,8 @@
 export default interface ProductTypes {
-    id: number;
-    designation: string;
+    num_produit: number;
+    design: string;
     quantite: number;
     description: string;
-    src: string;
+    image: string;
 }
 
