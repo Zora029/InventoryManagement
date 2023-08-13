@@ -1,4 +1,29 @@
+import { useState } from "react";
+
 const TableTwo = () => {
+  const [activities, setActivities] = useState([
+  {
+    id : "FI259",
+    name: "Income",
+    target: "Sony",
+    date: "2023-08-13",
+    quantity: 56
+  },
+  {
+    id : "FO259",
+    name: "Outcome",
+    target: "BMW",
+    date: "2023-08-14",
+    quantity: 12
+  },
+  {
+    id : "FO255",
+    name: "Outcome",
+    target: "Dell",
+    date: "2023-08-14",
+    quantity: 6
+  },
+  ]);
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="py-6 px-4 md:px-6 xl:px-7.5">
@@ -21,12 +46,34 @@ const TableTwo = () => {
           <p className="font-medium">Date</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Product count</p>
+          <p className="font-medium">Product quantity</p>
         </div>
       </div>
 
       {/* row */}
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+      
+
+      {activities.map((activity:any, key:number) => (
+        <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5" key={key}>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">{activity.id}</p>
+        </div>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">{activity.name}</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-black dark:text-white">{activity.target}</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-black dark:text-white">{activity.date}</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-meta-3">{activity.quantity}</p>
+        </div>
+      </div>
+      ))}
+
+      {/* <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-2 hidden items-center sm:flex">
           <p className="text-sm text-black dark:text-white">F034</p>
         </div>
@@ -59,24 +106,7 @@ const TableTwo = () => {
         <div className="col-span-1 flex items-center">
           <p className="text-sm text-meta-3">45</p>
         </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">F034</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Incomes</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">Sony</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">2023-08-08</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">45</p>
-        </div>
-      </div>
+      </div> */}
     </div>
   );
 };
