@@ -1,127 +1,112 @@
-import ProductOne from '../images/product/product-01.png';
-import ProductTwo from '../images/product/product-02.png';
-import ProductThree from '../images/product/product-03.png';
-import ProductFour from '../images/product/product-04.png';
+import { useState } from "react";
 
 const TableTwo = () => {
+  const [activities, setActivities] = useState([
+  {
+    id : "FI259",
+    name: "Income",
+    target: "Sony",
+    date: "2023-08-13",
+    quantity: 56
+  },
+  {
+    id : "FO259",
+    name: "Outcome",
+    target: "BMW",
+    date: "2023-08-14",
+    quantity: 12
+  },
+  {
+    id : "FO255",
+    name: "Outcome",
+    target: "Dell",
+    date: "2023-08-14",
+    quantity: 6
+  },
+  ]);
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="py-6 px-4 md:px-6 xl:px-7.5">
         <h4 className="text-xl font-semibold text-black dark:text-white">
-          Top Products
+          Recent Activities
         </h4>
       </div>
 
       <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">Activity ID</p>
         </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium">Acivity</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Sold</p>
+        <div className="col-span-1 hidden items-center sm:flex">
+          <p className="font-medium">Target name</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Profit</p>
+          <p className="font-medium">Date</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="font-medium">Product quantity</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductOne} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">
-              Apple Watch Series 7
-            </p>
-          </div>
+      {/* row */}
+      
+
+      {activities.map((activity:any, key:number) => (
+        <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5" key={key}>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">{activity.id}</p>
         </div>
         <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
+          <p className="text-sm text-black dark:text-white">{activity.name}</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$269</p>
+          <p className="text-sm text-black dark:text-white">{activity.target}</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">22</p>
+          <p className="text-sm text-black dark:text-white">{activity.date}</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$45</p>
+          <p className="text-sm text-meta-3">{activity.quantity}</p>
+        </div>
+      </div>
+      ))}
+
+      {/* <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">F034</p>
+        </div>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">Incomes</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-black dark:text-white">Sony</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-black dark:text-white">2023-08-08</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="text-sm text-meta-3">45</p>
         </div>
       </div>
       <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductTwo} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">Macbook Pro M1</p>
-          </div>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="text-sm text-black dark:text-white">F034</p>
         </div>
         <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
+          <p className="text-sm text-black dark:text-white">Incomes</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$546</p>
+          <p className="text-sm text-black dark:text-white">Sony</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">34</p>
+          <p className="text-sm text-black dark:text-white">2023-08-08</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$125</p>
+          <p className="text-sm text-meta-3">45</p>
         </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductThree} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">
-              Dell Inspiron 15
-            </p>
-          </div>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$443</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">64</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$247</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="h-12.5 w-15 rounded-md">
-              <img src={ProductFour} alt="Product" />
-            </div>
-            <p className="text-sm text-black dark:text-white">HP Probook 450</p>
-          </div>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="text-sm text-black dark:text-white">Electronics</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">$499</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-black dark:text-white">72</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="text-sm text-meta-3">$103</p>
-        </div>
-      </div>
+      </div> */}
     </div>
   );
 };
