@@ -1,6 +1,8 @@
 import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
+
+import IncomeOutComeDataService from '../services/IncomeOutComeDataService';
 
 const options: ApexOptions = {
   legend: {
@@ -85,18 +87,18 @@ const options: ApexOptions = {
     type: 'category',
     // depends on data from backend
     categories: [
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
+      '08-2023',
+      '09-2023',
+      '10-2023',
+      '11-2023',
+      '12-2023',
+      '01-2024',
+      '02-2024',
+      '03-2024',
+      '04-2024',
+      '05-2024',
+      '06-2024',
+      '07-2024',
     ],
     axisBorder: {
       show: false,
@@ -129,15 +131,54 @@ const ChartOne: React.FC = () => {
     series: [
       {
         name: 'Income',
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+        data: [20],
       },
 
       {
         name: 'Outcome',
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+        data: [56],
       },
     ],
   });
+
+  const fetchResource = async () => {
+    try {
+      const response = await IncomeOutComeDataService.get();
+      const data = response.data; 
+
+      const IncomeArr = data.map((info:any) => info.nbrEntree);
+
+      const OutComeArr = data.map((info:any) => info.nbrSortie);
+      console.log("Income Arr : " );
+      console.log(IncomeArr);
+      console.log("Outcome Arr : " );
+      console.log(OutComeArr );
+      
+
+      const chartInfo: ChartOneState = {
+        series: [
+          {
+            name: 'Income',
+            data: IncomeArr,
+          },
+    
+          {
+            name: 'Outcome',
+            data: OutComeArr,
+          },
+        ],
+      };
+
+      setState(chartInfo);
+    } catch(error) {
+      console.log("Chart Erreur : " + error);
+      
+    }
+  }
+
+  // useEffect(() => {
+  //   fetchResource();
+  // }, [])
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">

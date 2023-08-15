@@ -1,10 +1,8 @@
 interface CardProps {
   totalProduct: number;
-  totalProductAgo: number;
 }
-const CardThree = ({ totalProduct, totalProductAgo }: CardProps) => {
-  const improvement: number =
-    Math.round((totalProduct / totalProductAgo - 1) * 10000) / 100;
+const CardThree = ({ totalProduct }: CardProps) => {
+  const improvement: number = 9
   return (
     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">

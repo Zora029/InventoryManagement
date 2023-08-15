@@ -6,7 +6,7 @@ import SelectOption from '../../components/SelectOption';
 
 import ProductTypes from '../../types/ProductTypes';
 
-import { createResource } from '../../services/ProductCRUD';
+import { createResource, getElement } from '../../services/ProductCRUD';
 
 import { useParams } from 'react-router-dom';
 
@@ -14,33 +14,49 @@ const FormProducts = () => {
 
   const {num_prod} = useParams<{num_prod:any}>();
 
-  const [productState, setProductState] = useState({
-    num_produit: 0,
+  // const faker:ProductTypes = {
+  //   num_produit: '',
+  //   design: '',
+  //   description: '',
+  //   image: '',
+  //   quantite: 0
+  // }
+
+  const [productState, setProductState] = useState<ProductTypes>({
+    num_produit: '',
     design: '',
     description: '',
-    image: ''
+    image: '',
+    quantite: 0
   });
 
   const [pageTitle, setPageTitle] = useState("Ajouter");
 
   const [enableFields, setEnableFields] = useState(false);
 
+  const fetchElement = async (id:string): Promise<ProductTypes> => {
+    const elem = await getElement(id);
+    return elem.data;
+  }
+
   useEffect(() => {
     if (num_prod) {
-      // defini -> edit
-      // fake data
-      setProductState({
-        num_produit: 12,
-        design: 'Chocolat',
-        description: 'Boites',
-        image: 'product-01.png'
-      });
-
-      setPageTitle("Modifier");
-
-      setEnableFields(true);
+      // Fetch data
+      const fetchProduct = async () => {
+        try {
+          const element = await fetchElement(num_prod);
+          setProductState(element);
+          setPageTitle("Modifier");
+          setEnableFields(true);
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      };
+  
+      fetchProduct();
     }
   }, [num_prod]);
+  
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

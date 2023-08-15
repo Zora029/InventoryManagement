@@ -1,5 +1,5 @@
 export default interface ProductTypes {
-    num_produit: number;
+    num_produit: string;
     design: string;
     quantite: number;
     description: string;

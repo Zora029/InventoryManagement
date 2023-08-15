@@ -11,6 +11,17 @@ export const getAllResources = async () => {
     }
 };
 
+export const getElement = async (resourceId: string) => {
+    try {
+      const response = await ProductDataService.get(resourceId);
+      return response.data;
+    } catch(error) {
+      console.log("Get Product " + error);
+      return null;
+
+    }
+}
+
 // Fonction pour créer une nouvelle ressource
 export const createResource = async (newResourceData:any) => {
     try {

@@ -39,7 +39,7 @@ const Tables = () => {
 
       <div className="flex flex-col gap-10">
         <div>
-          <div className='flex flex-wrap w-full space-x-25'>
+          <div className='flex flex-wrap w-full gap-5 justify-center'>
             {productsState.length !== 0 ? (
               productsState.map((product, index: number) =>(
                 <ProductCard 
@@ -58,7 +58,7 @@ const Tables = () => {
           </div>
           
           <div
-            className="flex items-center justify-between bg-primary py-4 hover:bg-opacity-90 lg:px-8 xl:px-10 w-[15rem] rounded-full cursor-pointer"
+            className="flex items-center justify-between bg-primary py-4 hover:bg-opacity-90 lg:px-8 xl:px-10 w-[15rem] rounded-full cursor-pointer mx-auto"
           >
             <div className='text-white text-center font-medium'>See more</div>
             <ArrowForwardIcon sx={{ fontSize:30, color:"#fff" }}/>

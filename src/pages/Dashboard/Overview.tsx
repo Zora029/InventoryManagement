@@ -6,6 +6,12 @@ import TableTwo from '../../components/TableTwo.tsx';
 import TableRequestedProducts from '../../components/TableRequestedProducts.tsx';
 import OverviewOrdered from '../../components/OverviewOrdered.tsx';
 import OverviewCommended from '../../components/OverviewCommended.tsx';
+import { useEffect, useState } from 'react';
+
+import IncomeOutComeDataService from '../../services/IncomeOutComeDataService.ts';
+import { productCount } from '../../utils/productCount.ts';
+
+import { getCurrentMonthObject } from '../../utils/OverviewUtil.ts';
 
 //! Every component fetch data they need
 
@@ -19,29 +25,52 @@ interface Iinformation {
 }
 
 const Overview = () => {
-  const information: Iinformation = {
-    totalIncome: 3000,
-    totalIncomeAgo: 4000,
-    totalOutcome: 2000,
-    totalOutcomeAgo: 1750,
-    totalProduct: 69,
-    totalProductAgo: 50,
-  };
+
+  // const information: Iinformation = {
+  //   totalIncome: 3000,
+  //   totalIncomeAgo: 4000,
+  //   totalOutcome: 2000,
+  //   totalOutcomeAgo: 1750,
+  //   totalProduct: 69,
+  //   totalProductAgo: 50,
+  // };
+
+  const [income, setIncome] = useState(0);
+  const [outcome, setOutcome] = useState(0);
+  const [pro, setProducts] = useState(0);
+
+  // fetching the data
+  const fetchResource = async () => {
+    try {
+      const response = await IncomeOutComeDataService.get();
+      const data = response.data; 
+      const thisMonth = getCurrentMonthObject(data);
+      
+      const nbrProduct = await productCount();
+      setIncome(thisMonth.nbrEntree);
+      setOutcome(thisMonth.nbrSortie);
+      setProducts(nbrProduct);
+    } catch (error) {
+      console.log("Erreur " + error);
+    }
+  }
+
+  useEffect( () => {
+    fetchResource()
+  }, [])
+
   return (
     <div className="flex gap-7.5">
       <div className='w-[75%]'>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
           <CardOne
-            totalIncome={information.totalIncome}
-            totalIncomeAgo={information.totalIncomeAgo}
+            totalIncome={income}
           />
           <CardTwo
-            totalOutcome={information.totalOutcome}
-            totalOutcomeAgo={information.totalOutcomeAgo}
+            totalOutcome={outcome}
           />
           <CardThree
-            totalProduct={information.totalProduct}
-            totalProductAgo={information.totalProductAgo}
+            totalProduct={pro}
           />
         </div>
 
