@@ -1,47 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import ProductInput from './ProductInput';
-import {
-  IProductInputData,
-  IincomeFormProps,
-  IincomeTableData,
-} from '../types/index';
-import { productOptions } from '../database/index';
-import ConfirmBox from '../components/MessageBox/ConfirmBox';
+import ConfirmBox from './MessageBox/ConfirmBox';
 import SuccessBox from './MessageBox/SuccessBox';
 import ErrorBox from './MessageBox/ErrorBox';
 
-interface IAddIncomeData {
-  NumBonLiv: string;
-  DateE: string;
-  NomFournisseur: string;
-  products: IProductInputData[];
-}
+import {
+  IProductInputData,
+  IincomeFormProps,
+  IAddIncomeData,
+} from '../types/index';
+import ProductTypes from '../types/ProductTypes';
+
+import { getAllResources } from '../services/ProductCRUD';
 
 const AddIncomeForm: React.FC<IincomeFormProps> = ({
-  onSubmit,
-  currentIncomeTableData,
+  num_bon_livList,
+  onSubmitForm,
 }) => {
   const [formData, setFormData] = useState<IAddIncomeData>({
-    NumBonLiv: '',
-    DateE: '',
-    NomFournisseur: '',
-    products: [{ NumProduit: '', QtStk: 0 }],
+    num_bon_liv: '',
+    DateEntree: '',
+    nom_fournisseur: '',
+    products: [{ num_produit: '', qt: 0 }],
   });
   const [isConfirmationModalOpen, setisConfirmationModalOpen] = useState(false);
   const [isSuccessModalOpen, setisSuccessModalOpen] = useState(false);
   const [isErrorModalOpen, setisErrorModalOpen] = useState(false);
+  const [productOptions, setProductOptions] = useState<ProductTypes[]>([]);
+  const [errorNumBonLiv, seterrorNumBonLiv] = useState<string>('');
 
   const clearInput = () => {
     setFormData({
-      NumBonLiv: '',
-      DateE: '',
-      NomFournisseur: '',
-      products: [{ NumProduit: '', QtStk: 0 }],
+      num_bon_liv: '',
+      DateEntree: '',
+      nom_fournisseur: '',
+      products: [{ num_produit: '', qt: 0 }],
     });
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    if (name == 'num_bon_liv') {
+      if (num_bon_livList.includes(value)) {
+        seterrorNumBonLiv('This Num delivery voucher already exist !');
+      } else {
+        seterrorNumBonLiv('');
+      }
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -57,7 +63,7 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
   const handleAddProduct = () => {
     setFormData({
       ...formData,
-      products: [...formData.products, { NumProduit: '', QtStk: 0 }],
+      products: [...formData.products, { num_produit: '', qt: 0 }],
     });
   };
 
@@ -67,26 +73,33 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
   };
 
   const handleSubmit = () => {
-    // event.preventDefault();
-    // Here you can send the formData to the backend
-    console.log(formData);
-    let newIncomeTableData: IincomeTableData[] = formData.products.map((e) => ({
-      NumBonLiv: formData.NumBonLiv,
-      DateE: formData.DateE,
-      NomFournisseur: formData.NomFournisseur,
-      NumProduit: e.NumProduit,
-      Design: '',
-      QtStk: e.QtStk,
-    }));
+    console.log('formData when submit on AddIncomeForm : ', formData);
     try {
-      onSubmit([...currentIncomeTableData, ...newIncomeTableData]);
+      onSubmitForm(formData);
       setisSuccessModalOpen(true);
+      clearInput();
     } catch (error) {
       setisErrorModalOpen(true);
     }
-
-    clearInput();
   };
+
+  // Products Options
+  const retrieveProductOptions = async () => {
+    const data = await getAllResources();
+    data.unshift({
+      num_produit: '',
+      design: '',
+      quantite: 0,
+      description: '',
+      image: '',
+    });
+    setProductOptions(data);
+  };
+
+  // Mounted
+  useEffect(() => {
+    retrieveProductOptions();
+  }, []);
 
   return (
     <form className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -94,19 +107,24 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
         <h3 className="font-medium text-black dark:text-white">Add Income</h3>
       </div>
       <div className="flex flex-row justify-between gap-2 px-6.5 py-4">
-        <div className="w-full">
+        <div className="relative w-full">
           <label className="mb-3 block text-black dark:text-white">
             Num delivery voucher
           </label>
           <input
             required
             type="text"
-            name="NumBonLiv"
-            value={formData.NumBonLiv}
+            name="num_bon_liv"
+            value={formData.num_bon_liv}
             onChange={handleInputChange}
             placeholder="Num delivery voucher"
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {errorNumBonLiv && (
+            <p className="absolute -bottom-4 text-xs font-bold text-danger">
+              {errorNumBonLiv}
+            </p>
+          )}
         </div>
         <div className="w-full">
           <label className="mb-3 block text-black dark:text-white">
@@ -115,8 +133,8 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
           <input
             required
             type="date"
-            name="DateE"
-            value={formData.DateE}
+            name="DateEntree"
+            value={formData.DateEntree}
             onChange={handleInputChange}
             className="custom-input-date custom-input-date-1 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
@@ -128,8 +146,8 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
           <input
             required
             type="text"
-            name="NomFournisseur"
-            value={formData.NomFournisseur}
+            name="nom_fournisseur"
+            value={formData.nom_fournisseur}
             placeholder="Provider name"
             onChange={handleInputChange}
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -139,6 +157,7 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
 
       {formData.products.map((product, index) => (
         <ProductInput
+          useMax={false}
           key={index}
           selectedProduct={product}
           availableProducts={productOptions}

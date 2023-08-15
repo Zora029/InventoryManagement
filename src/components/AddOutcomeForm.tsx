@@ -1,34 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import ProductInput from './ProductInput';
-import { IProductInputData } from '../types/index';
-import { productOptions } from '../database/index';
+import ConfirmBox from './MessageBox/ConfirmBox';
+import SuccessBox from './MessageBox/SuccessBox';
+import ErrorBox from './MessageBox/ErrorBox';
 
-interface IAddOutcomeData {
-  NumFacture: string;
-  DateS: string;
-  NomClient: string;
-  products: IProductInputData[];
-}
+import {
+  IProductInputData,
+  IoutcomeFormProps,
+  IAddOutcomeData,
+} from '../types/index';
+import ProductTypes from '../types/ProductTypes';
 
-const AddOutcomeForm: React.FC = () => {
+import { getAllResources } from '../services/ProductCRUD';
+
+const AddOutcomeForm: React.FC<IoutcomeFormProps> = ({
+  num_factureList,
+  onSubmitForm,
+}) => {
   const [formData, setFormData] = useState<IAddOutcomeData>({
-    NumFacture: '',
-    DateS: '',
-    NomClient: '',
-    products: [{ NumProduit: '', QtStk: 0 }],
+    num_facture: '',
+    DateSortie: '',
+    nom_cli: '',
+    products: [{ num_produit: '', qt: 0 }],
   });
+  const [isConfirmationModalOpen, setisConfirmationModalOpen] = useState(false);
+  const [isSuccessModalOpen, setisSuccessModalOpen] = useState(false);
+  const [isErrorModalOpen, setisErrorModalOpen] = useState(false);
+  const [productOptions, setProductOptions] = useState<ProductTypes[]>([]);
+  const [errorNumFacture, seterrorNumFacture] = useState<string>('');
 
   const clearInput = () => {
     setFormData({
-      NumFacture: '',
-      DateS: '',
-      NomClient: '',
-      products: [{ NumProduit: '', QtStk: 0 }],
+      num_facture: '',
+      DateSortie: '',
+      nom_cli: '',
+      products: [{ num_produit: '', qt: 0 }],
     });
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    if (name == 'num_facture') {
+      console.log(num_factureList);
+
+      if (num_factureList.includes(value)) {
+        seterrorNumFacture('This Num Facture already exist !');
+      } else {
+        seterrorNumFacture('');
+      }
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -44,7 +65,7 @@ const AddOutcomeForm: React.FC = () => {
   const handleAddProduct = () => {
     setFormData({
       ...formData,
-      products: [...formData.products, { NumProduit: '', QtStk: 0 }],
+      products: [...formData.products, { num_produit: '', qt: 0 }],
     });
   };
 
@@ -53,35 +74,59 @@ const AddOutcomeForm: React.FC = () => {
     setFormData({ ...formData, products: updatedProducts });
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Here you can send the formData to the backend
-    console.log(formData);
-    clearInput();
+  const handleSubmit = () => {
+    console.log('formData when submit on AddOutcomeForm : ', formData);
+    try {
+      onSubmitForm(formData);
+      setisSuccessModalOpen(true);
+      clearInput();
+    } catch (error) {
+      setisErrorModalOpen(true);
+    }
   };
 
+  // Products Options
+  const retrieveProductOptions = async () => {
+    const data = await getAllResources();
+    data.unshift({
+      num_produit: '',
+      design: '',
+      quantite: 0,
+      description: '',
+      image: '',
+    });
+    setProductOptions(data);
+  };
+
+  // Mounted
+  useEffect(() => {
+    retrieveProductOptions();
+  }, []);
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
-    >
+    <form className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
         <h3 className="font-medium text-black dark:text-white">Add Income</h3>
       </div>
       <div className="flex flex-row justify-between gap-2 px-6.5 py-4">
-        <div className="w-full">
+        <div className="relative w-full">
           <label className="mb-3 block text-black dark:text-white">
             Num Facture
           </label>
           <input
             required
             type="text"
-            name="NumFacture"
-            value={formData.NumFacture}
+            name="num_facture"
+            value={formData.num_facture}
             onChange={handleInputChange}
             placeholder="Num Facturer"
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
+          {errorNumFacture && (
+            <p className="absolute -bottom-4 text-xs font-bold text-danger">
+              {errorNumFacture}
+            </p>
+          )}
         </div>
         <div className="w-full">
           <label className="mb-3 block text-black dark:text-white">
@@ -90,8 +135,8 @@ const AddOutcomeForm: React.FC = () => {
           <input
             required
             type="date"
-            name="DateS"
-            value={formData.DateS}
+            name="DateSortie"
+            value={formData.DateSortie}
             onChange={handleInputChange}
             className="custom-input-date custom-input-date-1 w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
           />
@@ -103,8 +148,8 @@ const AddOutcomeForm: React.FC = () => {
           <input
             required
             type="text"
-            name="NomClient"
-            value={formData.NomClient}
+            name="nom_cli"
+            value={formData.nom_cli}
             placeholder="Client name"
             onChange={handleInputChange}
             className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -114,6 +159,7 @@ const AddOutcomeForm: React.FC = () => {
 
       {formData.products.map((product, index) => (
         <ProductInput
+          useMax={true}
           key={index}
           selectedProduct={product}
           availableProducts={productOptions}
@@ -130,11 +176,20 @@ const AddOutcomeForm: React.FC = () => {
         <span className="text-xl">+</span>Add Product
       </button>
       <button
-        type="submit"
+        onClick={() => setisConfirmationModalOpen(true)}
+        type="button"
         className="mx-auto mb-4 flex w-[20%] justify-center rounded bg-primary p-3 font-medium text-gray"
       >
         Submit
       </button>
+      {isConfirmationModalOpen && (
+        <ConfirmBox
+          onConfirm={handleSubmit}
+          setisOpen={setisConfirmationModalOpen}
+        />
+      )}
+      {isSuccessModalOpen && <SuccessBox setisOpen={setisSuccessModalOpen} />}
+      {isErrorModalOpen && <ErrorBox setisOpen={setisErrorModalOpen} />}
     </form>
   );
 };

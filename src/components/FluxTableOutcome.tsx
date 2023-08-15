@@ -23,22 +23,22 @@ const FluxTableOutcome = ({ headers, data }: IoutcomeTableProps) => {
                 className="transition-all duration-300 hover:bg-gray-2 hover:shadow-md dark:hover:bg-meta-4"
               >
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.NumFacture}
+                  {e.num_facture}
                 </td>
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.DateS}
+                  {e.dateSortie}
                 </td>
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.NomClient}
+                  {e.nom_client}
                 </td>
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.NumProduit}
+                  {e.num_produit}
                 </td>
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.Design}
+                  {e.design}
                 </td>
                 <td className="border-b border-[#eee] py-3 px-1 text-black dark:border-strokedark dark:text-white">
-                  {e.QtStk}
+                  {e.quantite_sortie}
                 </td>
               </tr>
             ))}

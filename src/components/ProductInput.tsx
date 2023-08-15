@@ -2,6 +2,7 @@ import React from 'react';
 import { IProductInputProps } from '../types/index';
 
 const ProductInput: React.FC<IProductInputProps> = ({
+  useMax,
   selectedProduct,
   availableProducts,
   index,
@@ -15,7 +16,22 @@ const ProductInput: React.FC<IProductInputProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    onChange(index, { ...selectedProduct, [name]: value });
+
+    if (name == 'qt') {
+      if (useMax) {
+        const max = availableProducts.filter(
+          (product) => product.num_produit == selectedProduct.num_produit
+        )[0].quantite;
+        const val: number = parseFloat(value) > max ? max : parseFloat(value);
+        onChange(index, { ...selectedProduct, [name]: val });
+      } else {
+        const val: number = parseFloat(value);
+        onChange(index, { ...selectedProduct, [name]: val });
+      }
+    } else {
+      // If I want to use another input
+      onChange(index, { ...selectedProduct, [name]: value });
+    }
   };
 
   return (
@@ -46,14 +62,14 @@ const ProductInput: React.FC<IProductInputProps> = ({
           </span>
           <select
             required
-            name="NumProduit"
-            value={selectedProduct.NumProduit}
+            name="num_produit"
+            value={selectedProduct.num_produit}
             onChange={handleSelectChange}
             className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
           >
             {availableProducts.map((product) => (
-              <option key={product.NumProduit} value={product.NumProduit}>
-                {product.Design}
+              <option key={product.num_produit} value={product.num_produit}>
+                {product.design}
               </option>
             ))}
           </select>
@@ -84,8 +100,8 @@ const ProductInput: React.FC<IProductInputProps> = ({
         <input
           required
           type="number"
-          name="QtStk"
-          value={selectedProduct.QtStk}
+          name="qt"
+          value={selectedProduct.qt}
           onChange={handleInputChange}
           placeholder="Product quantity"
           className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
