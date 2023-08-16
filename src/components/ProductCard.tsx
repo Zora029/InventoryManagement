@@ -1,19 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ProductTypes from '../types/ProductTypes';
 
-const ProductCard: React.FC<ProductTypes> = ({
+import { deleteResource } from '../services/ProductCRUD';
+
+import ConfirmBoxDelete from './MessageBox/ConfirmBoxDelete';
+
+import { IProductCardProps } from '../types';
+
+const ProductCard = ({
   num_produit,
   design,
   quantite,
   description,
   image,
-}) => {
+  onReload
+}: IProductCardProps) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
+  const [isConfirmationModalOpen, setisConfirmationModalOpen] = useState(false);
+
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleClick = (event: any) => {
@@ -21,14 +30,17 @@ const ProductCard: React.FC<ProductTypes> = ({
     setIsVisible(!isVisible);
   };
 
-  const handleEdit = (num_produit:any) => {
+  const handleEdit = (num_produit: any) => {
+    navigate(`/product/form/${num_produit}`);
+  };
+
+  const handleDelete = (num_produit: any) => {
+    deleteResource(num_produit);
+    setTimeout(()=> {
+      onReload();
+    }, 2500)
     
-    navigate(`/product/form/${num_produit}`)
-  }
-
-  const handleDelete = (num_produit:any) => {
-
-  }
+  };
 
   useEffect(() => {
     const handleOutsideClick = (event: any) => {
@@ -38,6 +50,8 @@ const ProductCard: React.FC<ProductTypes> = ({
     };
 
     document.addEventListener('click', handleOutsideClick);
+
+    console.log('Image source : ' + image);
 
     return () => {
       document.removeEventListener('click', handleOutsideClick);
@@ -58,9 +72,26 @@ const ProductCard: React.FC<ProductTypes> = ({
 
       {isVisible && (
         <div className="absolute right-8 top-3 w-[5rem] flex-col bg-[#696666]">
-          <div className="cursor-pointer p-1 text-lg text-white" onClick={() => handleEdit(num_produit)}>Edit</div>
+          <div
+            className="cursor-pointer p-1 text-lg text-white"
+            onClick={() => handleEdit(num_produit)}
+          >
+            Edit
+          </div>
           <div className="my-1 h-0.5 w-full bg-white"></div>
-          <div className="cursor-pointer p-1 text-lg text-white">Delete</div>
+          <div
+            className="cursor-pointer p-1 text-lg text-white"
+            onClick={() => setisConfirmationModalOpen(true)}
+          >
+            Delete
+          </div>
+          {isConfirmationModalOpen && (
+            <ConfirmBoxDelete
+              onConfirm={handleDelete}
+              setisOpen={setisConfirmationModalOpen}
+              num_produit={num_produit}
+            />
+          )}
         </div>
       )}
 

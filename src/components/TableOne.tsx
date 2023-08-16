@@ -9,7 +9,11 @@ import DeleteIcon from './DeleteIcon';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
 
-const TableOne: React.FC<TableProductTypes> = ({ products }) => {
+import { deleteResource } from '../services/ProductCRUD';
+
+import { IProductTableProps } from '../types';
+
+const TableOne = ({ products, onReload }: IProductTableProps) => {
 
   const navigate = useNavigate()
 
@@ -17,6 +21,14 @@ const TableOne: React.FC<TableProductTypes> = ({ products }) => {
     
     navigate(`/product/form/${num_produit}`)
   }
+
+  const handleDelete = (num_produit: any) => {
+    deleteResource(num_produit);
+    setTimeout(()=> {
+      onReload();
+    }, 2500)
+    
+  };
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex justify-between">
@@ -68,7 +80,7 @@ const TableOne: React.FC<TableProductTypes> = ({ products }) => {
 
         {products.map((product:ProductTypes, index:number) => (
           <div
-            className="grid transform cursor-pointer grid-cols-3 border-b border-stroke bg-white transition-transform hover:scale-110 hover:shadow-lg dark:border-strokedark sm:grid-cols-5"
+            className="grid transform grid-cols-3 border-b border-stroke bg-white transition-transform hover:scale-110 hover:shadow-lg dark:border-strokedark sm:grid-cols-5"
             key={index}
           >
             <div className="flex items-center gap-3 p-2.5 xl:p-5 ">
@@ -102,7 +114,7 @@ const TableOne: React.FC<TableProductTypes> = ({ products }) => {
               </p>
             </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5  cursor-pointer">
               <div
                 className='cursor-pointer' 
                 onClick={() => handleEdit(product.num_produit)}>
@@ -110,7 +122,12 @@ const TableOne: React.FC<TableProductTypes> = ({ products }) => {
               </div>
               
               <div className="mx-2"></div>
-              <DeleteIcon />
+              <div
+                className='cursor-pointer' 
+                onClick={() => handleDelete(product.num_produit)}>
+                  <DeleteIcon />
+              </div>
+              
             </div>
           </div>
         ))}

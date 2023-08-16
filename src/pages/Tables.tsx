@@ -15,10 +15,16 @@ const Tables = () => {
 
   const [productsState,setProducts] = useState<ProductTypes[]>([]);
 
+  // const [haveToReload, setReloading] = useState(false);
+
   useEffect(() => {
     // Récupérer les ressources lors du montage du composant
     fetchResources();
   }, []);
+
+  const reload = () => {
+    fetchResources();
+  };
 
   const fetchResources = async () => {
     const data = await getAllResources();
@@ -49,6 +55,7 @@ const Tables = () => {
                   quantite={product.quantite}
                   description={product.description}
                   image={product.image}
+                  onReload={reload}
                 />
               ))
               ) : (
@@ -69,6 +76,7 @@ const Tables = () => {
 
         <TableOne
           products={productsState}
+          onReload={reload}
          />
 
       </div>

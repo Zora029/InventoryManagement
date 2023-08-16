@@ -14,6 +14,9 @@ export const getAllResources = async () => {
 export const getElement = async (resourceId: string) => {
     try {
       const response = await ProductDataService.get(resourceId);
+      console.log("Element getted :");
+      console.log(response.data);
+      
       return response.data;
     } catch(error) {
       console.log("Get Product " + error);

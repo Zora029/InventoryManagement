@@ -75,6 +75,11 @@ export interface IconfirmModalBoxProps {
   setisOpen: (isOpen: boolean) => void;
   onConfirm: () => void;
 }
+export interface IconfirmModalBoxDeleteProps {
+  setisOpen: (isOpen: boolean) => void;
+  onConfirm: (num_produit: string) => void;
+  num_produit: string;
+}
 
 // ***************** OVERVIEW **********************
 export interface ImostRequestedProduct {
@@ -89,4 +94,22 @@ export interface ImostRequestedProductThisMonth {
 export interface ImostCommandedProductsThisMonth {
   product_name: string;
   commanded_quantity: number;
+}
+
+// ****************** Product Card*********************
+
+export interface IProductCardProps {
+  num_produit: string;
+  design: string;
+  quantite: number;
+  description: string;
+  image: string;
+  onReload: () => void;
+}
+
+// ****************** Product Table*********************
+
+export interface IProductTableProps {
+  products : ProductTypes[];
+  onReload: () => void;
 }

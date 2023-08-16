@@ -6,13 +6,17 @@ import SelectOption from '../../components/SelectOption';
 
 import ProductTypes from '../../types/ProductTypes';
 
-import { createResource, getElement } from '../../services/ProductCRUD';
+import { createResource, getElement, updateResource } from '../../services/ProductCRUD';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const FormProducts = () => {
 
   const {num_prod} = useParams<{num_prod:any}>();
+
+  const navigate = useNavigate();
+
+  const [isCreate, setCreation] =useState(true);
 
   // const faker:ProductTypes = {
   //   num_produit: '',
@@ -22,32 +26,39 @@ const FormProducts = () => {
   //   quantite: 0
   // }
 
-  const [productState, setProductState] = useState<ProductTypes>({
-    num_produit: '',
-    design: '',
-    description: '',
-    image: '',
-    quantite: 0
-  });
+  const [productState, setProductState] = useState({
+    num_produit: "",
+    design: "",
+    quantite: 0,
+    description: "",
+    image: ''
+});
 
   const [pageTitle, setPageTitle] = useState("Ajouter");
 
   const [enableFields, setEnableFields] = useState(false);
 
-  const fetchElement = async (id:string): Promise<ProductTypes> => {
+  const fetchElement = async (id:string)=> {
     const elem = await getElement(id);
-    return elem.data;
+    return elem;
   }
 
   useEffect(() => {
+    console.log(num_prod);
+    
     if (num_prod) {
       // Fetch data
       const fetchProduct = async () => {
         try {
           const element = await fetchElement(num_prod);
+
+          console.log(element);
+          
           setProductState(element);
           setPageTitle("Modifier");
           setEnableFields(true);
+
+          setCreation(false);
         } catch (error) {
           console.error("Error fetching product:", error);
         }
@@ -95,9 +106,18 @@ const FormProducts = () => {
   const handleSubmit = (event:any) => {
     event.preventDefault();
     console.log(productState);
-    const data = createResource(productState);
-    console.log(data);
-    console.log("Element add succesfully");
+    if(isCreate){
+      const data = createResource(productState);
+      console.log("Element add succesfully");
+    } else {
+      const data = updateResource(num_prod, productState);
+      setCreation(true);
+      console.log("Element update succesfully");
+      navigate(`/product/list`);
+    }
+    
+    // console.log(data);
+    // console.log("Element add succesfully");
     
   }
 
@@ -237,7 +257,7 @@ const FormProducts = () => {
                     />
                   </svg>
                 </span>
-                Add product
+                {isCreate ? "Add" : "Modify"} product
               </button>
             </div>
           </div>

@@ -7,7 +7,7 @@ class ProductDataService {
   }
 
   get(id: any) {
-    return http.get(`/Product/${id}`);
+    return http.get(`/Product/${id}/`);
   }
 
   create(data: any) {
