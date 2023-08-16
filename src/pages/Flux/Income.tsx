@@ -36,7 +36,7 @@ const Income = () => {
     const response: IincomeTableData[] = await getAllIncomes();
 
     // Mise a jour des donnees de la table
-    setincomeTableData(response);
+    setincomeTableData(response.reverse());
 
     setnum_bon_livList(response.map((item) => item.num_bon_liv));
   };

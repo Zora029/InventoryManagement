@@ -38,7 +38,7 @@ const Outcome = () => {
     const response: IoutcomeTableData[] = await getAllOutcomes();
 
     // Mise a jour des donnees de la table
-    setoutcomeTableData(response);
+    setoutcomeTableData(response.reverse());
 
     setnum_factureList(response.map((item) => item.num_facture));
   };

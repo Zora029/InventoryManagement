@@ -1,52 +1,33 @@
-import CardOverview from "./CardOverview"
+import CardOverview from './CardOverview';
 
-import { useState } from "react"
+import { ImostRequestedProductThisMonth } from '../types/index';
 
-
-function OverviewOrdered() {
-  // fake data
-  const [products, setProducts] = useState([
-    {
-      id: "P4587",
-      src: "/src/images/product/product-01.png",
-      unite: "unites",
-      quantity: 10
-    },
-    {
-      id: "P4588",
-      src: "/src/images/product/product-01.png",
-      unite: "unites",
-      quantity: 11
-    },
-    {
-      id: "P4589",
-      src: "/src/images/product/product-01.png",
-      unite: "unites",
-      quantity: 8
-    },
-  ])
-
-  return (
-    <div className="bg-white dark:bg-boxdark">
-          <div className='text-title-md font-bold text-black dark:text-white py-4 mx-auto w-[80%]'>
-            Most ordered
-          </div>
-          <div className='h-0.5 bg-black dark:bg-white w-[80%] mx-auto my-1'></div>
-
-          {/* Card Container */}
-          <div className="flex flex-col gap-5 my-5 w-[80%] mx-auto pb-5">
-            {products.map((product:any, index:number) => (
-              <CardOverview 
-              id={product.id}
-              src={product.src}
-              unite={product.unite}
-              quantity={product.quantity} 
-              key={index}/>
-            ))}
-            
-          </div>
-    </div>
-  )
+interface IOverviewOrderedProps {
+  data: ImostRequestedProductThisMonth[];
 }
 
-export default OverviewOrdered
+function OverviewOrdered({ data }: IOverviewOrderedProps) {
+  return (
+    <div className="bg-white dark:bg-boxdark">
+      <div className="mx-auto w-[80%] py-4 text-title-xsm font-bold text-black dark:text-white">
+        Most requested this month
+      </div>
+      <div className="mx-auto my-1 h-0.5 w-[80%] bg-black dark:bg-white"></div>
+
+      {/* Card Container */}
+      <div className="my-5 mx-auto flex w-[80%] flex-col gap-5 pb-5">
+        {data.map((product, index) => (
+          <CardOverview
+            id={product.product_name}
+            src={'/src/images/product/product-01.png'}
+            unite={'Unite'}
+            quantity={product.ordered_quantity}
+            key={index}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default OverviewOrdered;

@@ -73,7 +73,6 @@ const AddIncomeForm: React.FC<IincomeFormProps> = ({
   };
 
   const handleSubmit = () => {
-    console.log('formData when submit on AddIncomeForm : ', formData);
     try {
       onSubmitForm(formData);
       setisSuccessModalOpen(true);

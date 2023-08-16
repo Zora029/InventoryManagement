@@ -75,3 +75,18 @@ export interface IconfirmModalBoxProps {
   setisOpen: (isOpen: boolean) => void;
   onConfirm: () => void;
 }
+
+// ***************** OVERVIEW **********************
+export interface ImostRequestedProduct {
+  num_produit: string;
+  product_name: string;
+  ordered_quantity: number;
+}
+export interface ImostRequestedProductThisMonth {
+  product_name: string;
+  ordered_quantity: number;
+}
+export interface ImostCommandedProductsThisMonth {
+  product_name: string;
+  commanded_quantity: number;
+}

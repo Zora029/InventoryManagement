@@ -87,18 +87,18 @@ const options: ApexOptions = {
     type: 'category',
     // depends on data from backend
     categories: [
+      '01-2023',
+      '02-2023',
+      '03-2023',
+      '04-2023',
+      '05-2023',
+      '06-2023',
+      '07-2023',
       '08-2023',
       '09-2023',
       '10-2023',
       '11-2023',
       '12-2023',
-      '01-2024',
-      '02-2024',
-      '03-2024',
-      '04-2024',
-      '05-2024',
-      '06-2024',
-      '07-2024',
     ],
     axisBorder: {
       show: false,
@@ -114,7 +114,7 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100,
+    max: 10,
   },
 };
 
@@ -144,16 +144,11 @@ const ChartOne: React.FC = () => {
   const fetchResource = async () => {
     try {
       const response = await IncomeOutComeDataService.get();
-      const data = response.data; 
+      const data = response.data;
 
-      const IncomeArr = data.map((info:any) => info.nbrEntree);
+      const IncomeArr = data.map((info: any) => info.nbrEntree);
 
-      const OutComeArr = data.map((info:any) => info.nbrSortie);
-      console.log("Income Arr : " );
-      console.log(IncomeArr);
-      console.log("Outcome Arr : " );
-      console.log(OutComeArr );
-      
+      const OutComeArr = data.map((info: any) => info.nbrSortie);
 
       const chartInfo: ChartOneState = {
         series: [
@@ -161,7 +156,7 @@ const ChartOne: React.FC = () => {
             name: 'Income',
             data: IncomeArr,
           },
-    
+
           {
             name: 'Outcome',
             data: OutComeArr,
@@ -170,15 +165,14 @@ const ChartOne: React.FC = () => {
       };
 
       setState(chartInfo);
-    } catch(error) {
-      console.log("Chart Erreur : " + error);
-      
+    } catch (error) {
+      console.log('Chart Erreur : ' + error);
     }
-  }
+  };
 
-  // useEffect(() => {
-  //   fetchResource();
-  // }, [])
+  useEffect(() => {
+    fetchResource();
+  }, []);
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -190,7 +184,7 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total Income</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium">01.01.2023 - 08.16.2023</p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -199,7 +193,7 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-secondary">Total Outcome</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium">01.01.2023 - 08.16.2023</p>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ interface CardProps {
   totalProduct: number;
 }
 const CardThree = ({ totalProduct }: CardProps) => {
-  const improvement: number = 9
+  // const improvement: number = 9
   return (
     <div className="rounded-sm border border-stroke bg-white py-6 px-7.5 shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
@@ -33,7 +33,7 @@ const CardThree = ({ totalProduct }: CardProps) => {
           <span className="text-sm font-medium">Total Product</span>
         </div>
 
-        <span
+        {/* <span
           className={`flex items-center gap-1 text-sm font-medium ${
             improvement > 0 ? 'text-meta-3' : 'text-danger'
           }`}
@@ -54,7 +54,7 @@ const CardThree = ({ totalProduct }: CardProps) => {
               fill=""
             />
           </svg>
-        </span>
+        </span> */}
       </div>
     </div>
   );

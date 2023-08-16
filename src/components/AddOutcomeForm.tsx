@@ -42,8 +42,6 @@ const AddOutcomeForm: React.FC<IoutcomeFormProps> = ({
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     if (name == 'num_facture') {
-      console.log(num_factureList);
-
       if (num_factureList.includes(value)) {
         seterrorNumFacture('This Num Facture already exist !');
       } else {
@@ -75,7 +73,6 @@ const AddOutcomeForm: React.FC<IoutcomeFormProps> = ({
   };
 
   const handleSubmit = () => {
-    console.log('formData when submit on AddOutcomeForm : ', formData);
     try {
       onSubmitForm(formData);
       setisSuccessModalOpen(true);
