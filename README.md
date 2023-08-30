@@ -1,4 +1,4 @@
-![InventoryManagement Preview](src/images/cards/cards-06.png)
+![InventoryManagement Preview](src/images/InventoryManagement-preview.png)
 # InventoryManagement
 
 ## Description
@@ -28,5 +28,5 @@ npm install
 ```bash
 npm run dev
 ```
-5. **Access the Application:** Open your web browser and navigate to `http://localhost:3000` to access the application.
+5. **Access the Application:** Open your web browser and navigate to `http://localhost:5173` to access the application.
 
